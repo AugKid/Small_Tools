@@ -1,0 +1,38 @@
+echo "Uninstalling Alert Logic Software, Please wait..."
+
+#Process is to delete Alert Logic using it's .msi file. located on our share and do it silently in the background 
+msiexec /x "\\Placeholder_Server\Placeholder_subfolder\software\AlertLogic\al_agent-LATEST.msi" /quiet
+
+
+#This is to provide a time buffer for the next command to make sure the folder is deleted 
+Start-Sleep -Seconds 10
+
+
+#This then check if the folder is deleted, if you see the "Folder is not empty" prompt, please delete the folder manually
+$folderPath = "C:\Program Files (x86)\AlertLogic\"
+
+if ((Get-ChildItem -Path $folderPath | Measure-Object).Count -eq 0) {
+    Write-Host "Folder is empty, deleting..."
+    Remove-Item $folderPath
+    Write-Host "Folder has been deleted."
+} else {
+    Write-Host "Folder is not empty."
+}
+
+
+
+Echo "Now Checking if .msi removed registry keys, if the keys are not deleted, it will manually delete it"   
+Start-Sleep -Seconds 5
+
+#This is to check if any registry key exist to delete 
+$registryPath = "HKLM:\SOFTWARE\WOW6432Node\AlertLogic"
+
+if(Test-Path $registryPath) {
+    Remove-Item -Path $registryPath -Recurse
+    Write-Host "Registry folder $registryPath deleted successfully."
+}
+else {
+    Write-Host "Registry folder $registryPath does not exist."
+}
+
+Read-Host "Press enter to exit..."

@@ -1,0 +1,14 @@
+$numbers = Get-Random -Count 5 -InputObject (1..69)
+$powerball = Get-Random -Minimum 1 -Maximum 27
+
+Write-Host "Powerball numbers:"
+foreach ($number in $numbers) {
+    Write-Host $number -NoNewline
+    Write-Host " " -NoNewline
+}
+Write-Host "Powerball:"
+Write-Host $powerball
+
+
+
+Read-Host "Press enter to exit..."

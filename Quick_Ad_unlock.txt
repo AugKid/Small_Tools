@@ -1,0 +1,20 @@
+#Set the execution policy 
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+
+# Import Active Directory module
+Import-Module ActiveDirectory
+
+# Prompt user for username
+$username = Read-Host "Enter username to unlock"
+
+# Unlock user account
+Unlock-ADAccount -Identity $username
+
+# Confirm account has been unlocked
+$user = Get-ADUser -Identity $username -Properties LockedOut
+if ($user.LockedOut) {
+    Write-Host "Failed to unlock user account"
+} else {
+    Write-Host "User account has been unlocked"
+}
+
